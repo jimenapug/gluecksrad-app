@@ -1,0 +1,232 @@
+/* ===========================================
+   1. BASE / RESET STYLES
+   Pixel / retro arcade theme
+   =========================================== */
+
+* {
+  box-sizing: border-box; /* makes width/height calculations easier for all elements */
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: #1a1a2e; /* deep pixel-night navy */
+  color: #ffffff;
+  font-family: 'VT323', monospace; /* retro readable pixel font for body text */
+  font-size: 20px; /* VT323 looks small by default, so we bump it up */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1, h2, h3 {
+  font-family: 'Press Start 2P', monospace; /* blocky 8-bit font for headings */
+  color: #ffe600; /* vivid yellow */
+}
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+  text-shadow: 3px 3px 0 #ff2e88; /* hard pixel-style shadow, no blur */
+}
+
+h2 {
+  font-size: 16px;
+  margin-top: 0;
+}
+
+h3 {
+  font-size: 14px;
+  color: #00e5ff;
+}
+
+/* ===========================================
+   2. THE "HIDDEN" CLASS
+   This is the key trick for switching screens!
+   =========================================== */
+
+.hidden {
+  display: none;
+}
+
+/* ===========================================
+   3. SCREEN CONTAINERS
+   =========================================== */
+
+.screen {
+  background-color: #16213e; /* dark blue card */
+  border: 4px solid #ffffff;
+  border-radius: 0; /* sharp corners = pixel look, no rounding */
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 8px 8px 0 #000000; /* hard offset shadow, not soft/blurry */
+  margin-bottom: 20px;
+}
+
+/* ===========================================
+   4. FORM ELEMENTS (text inputs)
+   =========================================== */
+
+label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-size: 18px;
+  color: #00e5ff; /* electric cyan */
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  background-color: #0f0f1e;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  border-radius: 0;
+  outline: none; /* removes the default blue browser outline */
+}
+
+input[type="text"]:focus {
+  border-color: #ffe600; /* border turns yellow when the user clicks into the field */
+}
+
+/* ===========================================
+   5. BUTTONS
+   =========================================== */
+
+button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  padding: 14px 18px;
+  margin-top: 20px;
+  margin-right: 10px;
+  color: #1a1a2e;
+  background-color: #39ff14; /* neon green */
+  border: 3px solid #ffffff;
+  border-radius: 0;
+  cursor: pointer; /* shows a hand icon on hover, so users know it's clickable */
+  box-shadow: 4px 4px 0 #000000;
+}
+
+/* "Active" = the moment the button is being pressed down.
+   Moving the button and reducing its shadow makes it LOOK pressed in. */
+button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #000000;
+}
+
+button:hover {
+  background-color: #ffe600; /* turns yellow on hover for feedback */
+}
+
+/* Give the two setup buttons slightly different colors so they're easy to tell apart */
+#create-poll-btn {
+  background-color: #ff2e88;
+  color: #ffffff;
+}
+
+#spin-btn {
+  background-color: #00e5ff;
+  color: #1a1a2e;
+  font-size: 16px;
+  padding: 18px 24px;
+}
+
+/* ===========================================
+   6. ERROR MESSAGES
+   =========================================== */
+
+.error-message {
+  color: #ff2e88;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* ===========================================
+   7. VOTING OPTIONS + RESULTS LIST
+   =========================================== */
+
+#vote-options-container label {
+  display: block;
+  background-color: #0f0f1e;
+  border: 2px solid #ffffff;
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+#results-list {
+  list-style: none;
+  padding: 0;
+}
+
+#results-list li {
+  background-color: #0f0f1e;
+  border: 2px solid #ffffff;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+/* ===========================================
+   8. WHEEL SECTION
+   =========================================== */
+
+#wheel-canvas {
+  border: 5px solid #ffffff;
+  border-radius: 50%; /* the wheel itself IS round - that's fine, it's a wheel! */
+  background-color: #0f0f1e;
+  display: block;
+  margin: 20px auto;
+}
+
+#winner-display {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: #ffe600;
+  text-align: center;
+  min-height: 24px;
+  text-shadow: 2px 2px 0 #ff2e88;
+}
+
+/* ===========================================
+   9. WHEEL CONTAINER + POINTER + SPIN ANIMATION
+   =========================================== */
+
+#wheel-container {
+  position: relative; /* lets us position the pointer relative to this box */
+  width: 400px;
+  margin: 20px auto;
+}
+
+/* The pointer is a small triangle made purely out of CSS borders.
+   A box with zero width/height, and only a colored top border,
+   collapses into a triangle shape pointing downward. */
+#wheel-pointer {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%); /* centers it horizontally */
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 28px solid #ffe600;
+  z-index: 10; /* keeps it visually on top of the wheel */
+  filter: drop-shadow(2px 2px 0 #000000); /* pixel-style hard shadow */
+}
+
+/* This transition is what makes the wheel spin SMOOTHLY instead of
+   jumping instantly to its new rotation. cubic-bezier here creates an
+   animation that starts fast and gradually slows down (like a real wheel). */
+#wheel-canvas {
+  transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

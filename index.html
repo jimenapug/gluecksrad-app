@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Glücksrad mit Abstimmungsfaktor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🎡 Glücksrad mit Abstimmungsfaktor</h1>
+
+  <!-- ============================= -->
+  <!-- SCREEN 1: SETUP (create poll) -->
+  <!-- ============================= -->
+  <section id="setup-screen" class="screen">
+    <h2>Neue Abstimmung erstellen</h2>
+
+    <label for="question-input">Frage:</label>
+    <input type="text" id="question-input" placeholder="z.B. Was essen wir heute?">
+
+    <div id="options-container">
+      <!-- Option input fields will be added here -->
+      <label>Option 1:</label>
+      <input type="text" class="option-input" placeholder="Option 1">
+
+      <label>Option 2:</label>
+      <input type="text" class="option-input" placeholder="Option 2">
+    </div>
+
+    <button id="add-option-btn">+ Option hinzufügen</button>
+    <button id="create-poll-btn">Abstimmung erstellen</button>
+
+    <p id="setup-error" class="error-message"></p>
+  </section>
+
+  <!-- ============================= -->
+  <!-- SCREEN 2: VOTING              -->
+  <!-- ============================= -->
+  <section id="voting-screen" class="screen hidden">
+    <h2 id="voting-question"></h2>
+
+    <form id="vote-form">
+      <div id="vote-options-container">
+        <!-- Radio buttons for each option will be added here by JavaScript -->
+      </div>
+      <button type="submit" id="submit-vote-btn">Abstimmen</button>
+    </form>
+
+    <h3>Aktuelle Ergebnisse:</h3>
+    <ul id="results-list">
+      <!-- Vote counts will be shown here -->
+    </ul>
+
+    <button id="reset-poll-btn">Neue Abstimmung starten</button>
+
+    <hr>
+
+    <!-- ============================= -->
+    <!-- WHEEL SECTION                 -->
+    <!-- ============================= -->
+    <h2>Glücksrad</h2>
+    <div id="wheel-container">
+      <div id="wheel-pointer"></div>
+      <canvas id="wheel-canvas" width="400" height="400"></canvas>
+    </div>
+    <br>
+    <button id="spin-btn">Rad drehen</button>
+    <p id="winner-display"></p>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
