@@ -276,6 +276,18 @@ function drawWheel(pollData) {
     ctx.fill();
 
     ctx.stroke();
+ // --- TEXT ON SLICES ---
+ctx.save();
+ctx.translate(centerX, centerY);
+ctx.rotate(slice.mid);
+
+ctx.fillStyle = "#111";
+ctx.font = "bold 14px Arial";
+ctx.textAlign = "right";
+
+ctx.fillText(slice.text, radius - 10, 5);
+
+ctx.restore();
   });
 }
 
