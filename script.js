@@ -259,21 +259,16 @@ resetPollBtn.addEventListener("click", function () {
     return; // user clicked "Cancel", so do nothing
   }
 
-  // Remove the saved poll from localStorage completely
-  localStorage.removeItem("pollData");
+  // Remove ALL app data from localStorage (not just one key), so no
+  // stale value can possibly survive under any key we might have used.
+  localStorage.clear();
 
-  // Clear the setup form fields so they're empty for the new poll
-  questionInput.value = "";
-  optionsContainer.innerHTML = `
-    <label>Option 1:</label>
-    <input type="text" class="option-input" placeholder="Option 1">
-    <label>Option 2:</label>
-    <input type="text" class="option-input" placeholder="Option 2">
-  `;
-
-  // Switch back to the setup screen
-  votingScreen.classList.add("hidden");
-  setupScreen.classList.remove("hidden");
+  // Force a full reload of the page. This is the safest way to guarantee
+  // a "fresh first visit" state: it wipes every in-memory JavaScript
+  // variable (currentRotation, etc.) and re-runs script.js from the top,
+  // which will find nothing in localStorage and show the empty setup
+  // screen - exactly like a brand new visitor.
+  location.reload();
 });
 
 // ===========================================
