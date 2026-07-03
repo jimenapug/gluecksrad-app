@@ -226,54 +226,11 @@ voteForm.addEventListener("submit", function (event) {
 });
 
 // ===========================================
-// 7. LOAD EXISTING POLL ON PAGE START
+// 7. WHEEL DRAWING
 // ===========================================
-// This code runs immediately when script.js loads (not inside any
-// button click). It checks: "was there already a poll saved from
-// before?" If yes, skip the setup screen and go straight to voting.
-
-const savedPollData = localStorage.getItem("pollData");
-
-if (savedPollData) {
-  // A poll already exists! Convert it back into an object...
-  const pollData = JSON.parse(savedPollData);
-
-  // ...and show the voting screen instead of the setup screen.
-  setupScreen.classList.add("hidden");
-  votingScreen.classList.remove("hidden");
-  renderVotingScreen(pollData);
-}
-// If savedPollData is null (nothing saved yet), we do nothing here,
-// and the setup screen stays visible by default - exactly what we want.
-
-// ===========================================
-// 8. RESET POLL BUTTON
-// ===========================================
-
-const resetPollBtn = document.getElementById("reset-poll-btn");
-
-resetPollBtn.addEventListener("click", function () {
-  const confirmed = confirm("Möchtest du wirklich eine neue Abstimmung starten? Alle aktuellen Stimmen gehen verloren.");
-
-  if (!confirmed) {
-    return; // user clicked "Cancel", so do nothing
-  }
-
-  // Remove ALL app data from localStorage (not just one key), so no
-  // stale value can possibly survive under any key we might have used.
-  localStorage.clear();
-
-  // Force a full reload of the page. This is the safest way to guarantee
-  // a "fresh first visit" state: it wipes every in-memory JavaScript
-  // variable (currentRotation, etc.) and re-runs script.js from the top,
-  // which will find nothing in localStorage and show the empty setup
-  // screen - exactly like a brand new visitor.
-  location.reload();
-});
-
-// ===========================================
-// 9. WHEEL DRAWING
-// ===========================================
+// IMPORTANT: this must be defined BEFORE section 8 below, because
+// section 8 runs immediately on page load and may call drawWheel()
+// right away (if a poll was already saved from a previous visit).
 
 const wheelCanvas = document.getElementById("wheel-canvas");
 const ctx = wheelCanvas.getContext("2d"); // "2d" = we're drawing flat 2D shapes
@@ -363,6 +320,52 @@ function drawWheel(pollData) {
     ctx.restore(); // undo the translate/rotate for the next slice
   });
 }
+
+// ===========================================
+// 8. LOAD EXISTING POLL ON PAGE START
+// ===========================================
+// This code runs immediately when script.js loads (not inside any
+// button click). It checks: "was there already a poll saved from
+// before?" If yes, skip the setup screen and go straight to voting.
+
+const savedPollData = localStorage.getItem("pollData");
+
+if (savedPollData) {
+  // A poll already exists! Convert it back into an object...
+  const pollData = JSON.parse(savedPollData);
+
+  // ...and show the voting screen instead of the setup screen.
+  setupScreen.classList.add("hidden");
+  votingScreen.classList.remove("hidden");
+  renderVotingScreen(pollData);
+}
+// If savedPollData is null (nothing saved yet), we do nothing here,
+// and the setup screen stays visible by default - exactly what we want.
+
+// ===========================================
+// 9. RESET POLL BUTTON
+// ===========================================
+
+const resetPollBtn = document.getElementById("reset-poll-btn");
+
+resetPollBtn.addEventListener("click", function () {
+  const confirmed = confirm("Möchtest du wirklich eine neue Abstimmung starten? Alle aktuellen Stimmen gehen verloren.");
+
+  if (!confirmed) {
+    return; // user clicked "Cancel", so do nothing
+  }
+
+  // Remove ALL app data from localStorage (not just one key), so no
+  // stale value can possibly survive under any key we might have used.
+  localStorage.clear();
+
+  // Force a full reload of the page. This is the safest way to guarantee
+  // a "fresh first visit" state: it wipes every in-memory JavaScript
+  // variable (currentRotation, etc.) and re-runs script.js from the top,
+  // which will find nothing in localStorage and show the empty setup
+  // screen - exactly like a brand new visitor.
+  location.reload();
+});
 
 // ===========================================
 // 10. SPIN THE WHEEL
